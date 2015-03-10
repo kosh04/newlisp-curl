@@ -1,7 +1,8 @@
-;;; curl.lsp -- libcurl for newLISP
+;;; curl.lsp --- libcurl wrapper for newLISP
 
 ;; ChangeLog:
 ;;
+;; 2015-03-10  add testing
 ;; 2013-12-04  add function curl-get. add dylib (osx).
 ;; 2011-08-02  first commit.
 
@@ -14,14 +15,18 @@
 
 (case ostype
   ("Win32"
-   ;; (env "PATH" (append "C:\\tmp\\curl-7.21.7-devel-mingw32\\bin;" (env "PATH")))
    (define libcurl "libcurl.dll"))
+  ("Cygwin"
+   (define libcurl "cygcurl-4.dll"))
   ("BSD"
    (define libcurl "libcurl.so"))
   ("OSX"
    (define libcurl "libcurl.dylib"))
+  ("Linux"
+   (define libcurl "libcurl.so.3"))
   (true
-   (define libcurl "libcurl.so.3")))
+   ;; assume unix flavor
+   (define libcurl "libcurl.so")))
 
 #include <curl/curl.h>
 (import libcurl "curl_strequal")
@@ -198,8 +203,8 @@
       (setf res (curl_easy_perform curl))
       (curl_easy_cleanup curl)
       (if (!= res CURLE_OK)
-          (write-line 2 (get-string (curl_easy_strerror res)))))
-    true))
+          (write-line 2 (get-string (curl_easy_strerror res))))
+      (= res CURLE_OK))))
 
 ;; @syntax (curl-get <url>)
 ;; @param <url>
