@@ -1,4 +1,11 @@
-;;; curl.lsp --- libcurl wrapper for newLISP
+;;; curl.lsp
+
+;; @module curl.lsp
+;; @description libcurl wrapper
+;; @version 0.2
+;; @author KOBAYASHI Shigeru (kosh)
+;; @license MIT
+;; @location https://github.com/kosh04/newlisp-curl
 
 ;; ChangeLog:
 ;;
