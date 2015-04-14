@@ -23,6 +23,8 @@
 (case ostype
   ("Win32"
    (define libcurl "libcurl.dll"))
+  ("Windows" ; v.10.6.3+
+   (define libcurl "libcurl.dll"))
   ("Cygwin"
    (define libcurl "cygcurl-4.dll"))
   ("BSD"
