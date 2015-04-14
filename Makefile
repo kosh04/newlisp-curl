@@ -1,7 +1,7 @@
-newlisp := newlisp
-fetch := curl -sOL
+newlisp ?= newlisp
 
-unittest_url := https://rawgit.com/kosh04/newlisp.snippet/master/unittest.lsp
+fetch := curl -sOL
+unittest_url := https://raw.github.com/kosh04/newlisp.snippet/master/unittest.lsp
 
 default: test
 
