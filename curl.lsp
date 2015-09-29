@@ -2,15 +2,16 @@
 
 ;; @module curl.lsp
 ;; @description libcurl wrapper
-;; @version 0.2
+;; @version 0.3
 ;; @author KOBAYASHI Shigeru (kosh)
 ;; @license MIT
 ;; @location https://github.com/kosh04/newlisp-curl
 
 ;; ChangeLog:
 ;;
+;; 2015-09-28  add "cdecl" to import calls (Thanks xytroxon, Lutz)
 ;; 2015-03-10  add testing
-;; 2013-12-04  add function curl-get. add dylib (osx).
+;; 2013-12-04  add function curl-get. add osx dylib.
 ;; 2011-08-02  first commit.
 
 ;; Link:
@@ -20,88 +21,82 @@
 ;; libcurl - source code examples
 ;; - http://curl.haxx.se/libcurl/c/example.html
 
-(case ostype
-  ("Win32"
-   (define libcurl "libcurl.dll"))
-  ("Windows" ; v.10.6.3+
-   (define libcurl "libcurl.dll"))
-  ("Cygwin"
-   (define libcurl "cygcurl-4.dll"))
-  ("BSD"
-   (define libcurl "libcurl.so"))
-  ("OSX"
-   (define libcurl "libcurl.dylib"))
-  ("Linux"
-   (define libcurl "libcurl.so.3"))
-  (true
-   ;; assume unix flavor
-   (define libcurl "libcurl.so")))
+(define libcurl
+  (case ostype
+    ("Win32"   "libcurl.dll")
+    ("Windows" "libcurl.dll")   ; v.10.6.3+
+    ("Cygwin"  "cygcurl-4.dll")
+    ("BSD"     "libcurl.so")
+    ("OSX"     "libcurl.dylib")
+    ("Linux"   "libcurl.so.3")
+    (true      "libcurl.so")    ; unix flavor
+    ))
 
 #include <curl/curl.h>
-(import libcurl "curl_strequal")
-(import libcurl "curl_strnequal")
-(import libcurl "curl_formadd")
-(import libcurl "curl_formget")
-(import libcurl "curl_formfree")
-(import libcurl "curl_getenv")
-(import libcurl "curl_version")       ; char *curl_version();
-(import libcurl "curl_easy_escape")   ; char *curl_easy_escape(CURL *curl, char *url, int length);
-(import libcurl "curl_escape")        ; XXX (deprecated, do not use)
-(import libcurl "curl_easy_unescape") ; char *curl_easy_unescape(CURL *curl, char *url, int inlength, int * outlength);
-(import libcurl "curl_unescape")
-(import libcurl "curl_free")          ; void curl_free(char *ptr);
-(import libcurl "curl_global_init")   ; CURLcode curl_global_init(long flags);
-(import libcurl "curl_global_init_mem")
-(import libcurl "curl_global_cleanup")
-(import libcurl "curl_slist_append")
-(import libcurl "curl_slist_free_all")
-(import libcurl "curl_getdate")
-(import libcurl "curl_share_init")
-(import libcurl "curl_share_setopt")
-(import libcurl "curl_share_cleanup")
-(import libcurl "curl_version_info")
-(import libcurl "curl_easy_strerror") ; const char *curl_easy_strerror(CURLcode errornum);
-(import libcurl "curl_share_strerror")
-(import libcurl "curl_easy_pause")
+(import libcurl "curl_strequal" "cdecl")
+(import libcurl "curl_strnequal" "cdecl")
+(import libcurl "curl_formadd" "cdecl")
+(import libcurl "curl_formget" "cdecl")
+(import libcurl "curl_formfree" "cdecl")
+(import libcurl "curl_getenv" "cdecl")
+(import libcurl "curl_version" "cdecl")       ; char *curl_version();
+(import libcurl "curl_easy_escape" "cdecl")   ; char *curl_easy_escape(CURL *curl, char *url, int length);
+(import libcurl "curl_escape" "cdecl")        ; XXX (deprecated, do not use)
+(import libcurl "curl_easy_unescape" "cdecl") ; char *curl_easy_unescape(CURL *curl, char *url, int inlength, int * outlength);
+(import libcurl "curl_unescape" "cdecl")
+(import libcurl "curl_free" "cdecl")          ; void curl_free(char *ptr);
+(import libcurl "curl_global_init" "cdecl")   ; CURLcode curl_global_init(long flags);
+(import libcurl "curl_global_init_mem" "cdecl")
+(import libcurl "curl_global_cleanup" "cdecl")
+(import libcurl "curl_slist_append" "cdecl")
+(import libcurl "curl_slist_free_all" "cdecl")
+(import libcurl "curl_getdate" "cdecl")
+(import libcurl "curl_share_init" "cdecl")
+(import libcurl "curl_share_setopt" "cdecl")
+(import libcurl "curl_share_cleanup" "cdecl")
+(import libcurl "curl_version_info" "cdecl")
+(import libcurl "curl_easy_strerror" "cdecl") ; const char *curl_easy_strerror(CURLcode errornum);
+(import libcurl "curl_share_strerror" "cdecl")
+(import libcurl "curl_easy_pause" "cdecl")
 
 #include <curl/easy.h>
-(import libcurl "curl_easy_init")     ; CURL *curl_easy_init();
-(import libcurl "curl_easy_setopt")   ; CURLcode curl_easy_setopt(CURL *handle, CURLoption option, parameter);
-(import libcurl "curl_easy_perform")  ; CURLcode curl_easy_perform(CURL *handle);
-(import libcurl "curl_easy_cleanup")  ; void curl_easy_cleanup(CURL * handle);
-(import libcurl "curl_easy_getinfo")  ; CURLcode curl_easy_getinfo(CURL *curl, CURLINFO info, ...);
-(import libcurl "curl_easy_duphandle")
-(import libcurl "curl_easy_reset")
-(import libcurl "curl_easy_recv")
-(import libcurl "curl_easy_send")
+(import libcurl "curl_easy_init" "cdecl")     ; CURL *curl_easy_init();
+(import libcurl "curl_easy_setopt" "cdecl")   ; CURLcode curl_easy_setopt(CURL *handle, CURLoption option, parameter);
+(import libcurl "curl_easy_perform" "cdecl")  ; CURLcode curl_easy_perform(CURL *handle);
+(import libcurl "curl_easy_cleanup" "cdecl")  ; void curl_easy_cleanup(CURL * handle);
+(import libcurl "curl_easy_getinfo" "cdecl")  ; CURLcode curl_easy_getinfo(CURL *curl, CURLINFO info, ...);
+(import libcurl "curl_easy_duphandle" "cdecl")
+(import libcurl "curl_easy_reset" "cdecl")
+(import libcurl "curl_easy_recv" "cdecl")
+(import libcurl "curl_easy_send" "cdecl")
 
 #include <curl/mprintf.h>
-(import libcurl "curl_mprintf")
-(import libcurl "curl_mfprintf")
-(import libcurl "curl_msprintf")
-(import libcurl "curl_msnprintf")
-(import libcurl "curl_mvprintf")
-(import libcurl "curl_mvfprintf")
-(import libcurl "curl_mvsprintf")
-(import libcurl "curl_mvsnprintf")
-(import libcurl "curl_maprintf")
-(import libcurl "curl_mvaprintf")
+(import libcurl "curl_mprintf" "cdecl")
+(import libcurl "curl_mfprintf" "cdecl")
+(import libcurl "curl_msprintf" "cdecl")
+(import libcurl "curl_msnprintf" "cdecl")
+(import libcurl "curl_mvprintf" "cdecl")
+(import libcurl "curl_mvfprintf" "cdecl")
+(import libcurl "curl_mvsprintf" "cdecl")
+(import libcurl "curl_mvsnprintf" "cdecl")
+(import libcurl "curl_maprintf" "cdecl")
+(import libcurl "curl_mvaprintf" "cdecl")
 
 #include <curl/multi.h>
-(import libcurl "curl_multi_init")
-(import libcurl "curl_multi_add_handle")
-(import libcurl "curl_multi_remove_handle")
-(import libcurl "curl_multi_fdset")
-(import libcurl "curl_multi_perform")
-(import libcurl "curl_multi_cleanup")
-(import libcurl "curl_multi_info_read")
-(import libcurl "curl_multi_strerror")
-(import libcurl "curl_multi_socket")
-(import libcurl "curl_multi_socket_action")
-(import libcurl "curl_multi_socket_all")
-(import libcurl "curl_multi_timeout")
-(import libcurl "curl_multi_setopt")
-(import libcurl "curl_multi_assign")
+(import libcurl "curl_multi_init" "cdecl")
+(import libcurl "curl_multi_add_handle" "cdecl")
+(import libcurl "curl_multi_remove_handle" "cdecl")
+(import libcurl "curl_multi_fdset" "cdecl")
+(import libcurl "curl_multi_perform" "cdecl")
+(import libcurl "curl_multi_cleanup" "cdecl")
+(import libcurl "curl_multi_info_read" "cdecl")
+(import libcurl "curl_multi_strerror" "cdecl")
+(import libcurl "curl_multi_socket" "cdecl")
+(import libcurl "curl_multi_socket_action" "cdecl")
+(import libcurl "curl_multi_socket_all" "cdecl")
+(import libcurl "curl_multi_timeout" "cdecl")
+(import libcurl "curl_multi_setopt" "cdecl")
+(import libcurl "curl_multi_assign" "cdecl")
 
 #include <curl/curl.h>
 (define CURL_MAX_WRITE_SIZE 16384)
@@ -156,16 +151,15 @@
   (first (unpack (format "s%u" len) ptr)))
 
 ;; @syntax (curl-version)
-;; @return <string> Returns the libcurl version string.
+;; @return libcurl version string
 ;; @example
 ;; (curl-version) => "libcurl/7.30.0 SecureTransport zlib/1.2.5"
 
 (define (curl-version)
   (get-string (curl_version)))
 
-;; @syntax (curl-easy-escape <url>)
-;; @param <url>
-;; @return <string> Return the encoded url.
+;; @syntax (curl-easy-escape <string>)
+;; @return URL encoded string
 ;; @example
 ;; (curl-easy-escape "newlisp.org/?q=index.html#123")
 ;; => "newlisp.org%2F%3Fq%3Dindex.html%23123"
@@ -178,9 +172,8 @@
     (curl_easy_cleanup curl)
     str))
 
-;; @syntax (curl-easy-unescape <url>)
-;; @param <url>
-;; @return <string> Returns the unescaped url.
+;; @syntax (curl-easy-unescape <string>)
+;; @return URL decoded string
 ;; @example
 ;; (curl-easy-unescape "newlisp.org%2F%3Fq%3Dindex.html%23123")
 ;; => "newlisp.org/?q=index.html#123"
@@ -195,10 +188,10 @@
     str))
 
 ;; @syntax (curl-simple <url>)
-;; @param <url>
 ;; @example
 ;; (curl-simple "https://www.google.com/")
 ;; -> print html data to stdout
+;; (curl-simple url) ~= (print (curl-get url))
 
 (define (curl-simple url (verbose nil))
   (local (curl res)
@@ -216,12 +209,10 @@
       (= res CURLE_OK))))
 
 ;; @syntax (curl-get <url>)
-;; @param <url>
-;; @return <string> Returns html data.
+;; @return recieved html data
 ;; @example
 ;; (curl-get "https://www.google.com/")
 ;; => "<HTML><HEAD><meta http-equiv=\"content-type\" ..."
-;; (curl-simple url) ~= (print (curl-get url))
 
 (define (curl-get url)
   (local (curl buffer writefn res)

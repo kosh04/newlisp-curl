@@ -3,3 +3,6 @@
 \#*\#
 
 unittest.lsp
+
+# DLL directory for testing
+/curl-*/
