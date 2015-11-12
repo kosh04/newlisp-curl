@@ -1,6 +1,8 @@
 newlisp-curl
 ============
 
+newLISP binding to libcURL.
+
 [![Build Status](https://travis-ci.org/kosh04/newlisp-curl.svg)](https://travis-ci.org/kosh04/newlisp-curl)
 
 WARNING

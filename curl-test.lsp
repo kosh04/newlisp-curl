@@ -11,7 +11,8 @@
   (= (curl-easy-escape "newlisp.org/?q=index.html#123")
      "newlisp.org%2F%3Fq%3Dindex.html%23123")
   (= (curl-easy-escape "\xE3\x82\xB3\xE3\x83\x9E\xE3\x83\xB3\xE3\x83\x89\xE3\x83\xBC")
-     "%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%83%BC"))
+     "%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%83%BC")
+  )
 
 (define-test "curl-easy-unescape"
   (= (curl-easy-unescape "") "")
@@ -28,6 +29,3 @@
 
 (define-test "curl-get#https"
   (json-parse (curl-get "https://httpbin.org/get")))
-
-(Test:run)
-

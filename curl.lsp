@@ -2,24 +2,26 @@
 
 ;; @module curl.lsp
 ;; @description libcurl wrapper
-;; @version 0.3
+;; @version 0.3.1
 ;; @author KOBAYASHI Shigeru (kosh)
 ;; @license MIT
 ;; @location https://github.com/kosh04/newlisp-curl
 
-;; ChangeLog:
-;;
-;; 2015-09-28  add "cdecl" to import calls (Thanks xytroxon, Lutz)
-;; 2015-03-10  add testing
-;; 2013-12-04  add function curl-get. add osx dylib.
-;; 2011-08-02  first commit.
+;;; ChangeLog:
 
-;; Link:
-;;
+;; 2015-09-28 v0.3 add "cdecl" to import calls (Thanks xytroxon, Lutz)
+;; 2015-03-10 v0.2 add testing
+;; 2013-12-04 v0.1.1 add function curl-get. add osx dylib.
+;; 2011-08-02 v0.1 first commit.
+
+;;; Link:
+
 ;; libcurl - API
 ;; - http://curl.haxx.se/libcurl/c/
 ;; libcurl - source code examples
 ;; - http://curl.haxx.se/libcurl/c/example.html
+
+;;; Code:
 
 (define libcurl
   (case ostype
@@ -216,7 +218,6 @@
 
 (define (curl-get url)
   (local (curl buffer writefn res)
-    (curl_global_init CURL_GLOBAL_ALL)
     (setq curl (curl_easy_init))
     (when (!= curl 0)
       (curl_easy_setopt curl CURLOPT_URL url)
@@ -237,5 +238,7 @@
       (curl_easy_cleanup curl))
     (curl_global_cleanup)
     buffer))
+
+;;(curl_global_init CURL_GLOBAL_ALL)
 
 (context MAIN)

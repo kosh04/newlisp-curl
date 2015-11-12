@@ -10,7 +10,7 @@ unittest.lsp:
 
 .PHONY: test
 test: unittest.lsp
-	$(newlisp) -n curl-test.lsp
+	$(newlisp) -n curl-test.lsp -e "(Test:run)"
 
 .PHONY: clean
 clean:
